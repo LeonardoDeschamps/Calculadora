@@ -1,14 +1,14 @@
-#pegarDiv {
-    position: absolute;
-    z-index: 9;
-    background-color: #f1f1f1;
-    border: 1px solid #d3d3d3;
+.conteudo {
+    width: 100%;
+    height: 75px;
+    border: 1px lightgray solid;
+    font-size: 80px;
+    text-align: right;
 }
 
-#pegarDivCabecalho {
-    padding: 10px;
-    cursor: move;
-    z-index: 10;
-    background-color: #2196f3;
-    color: #fff;
+.botao {
+    width: 75px;
+    height: 75px;
+    font-size: 30px;
+    cursor: pointer;
 }

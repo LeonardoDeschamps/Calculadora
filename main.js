@@ -1,8 +1,11 @@
+let fTotal = 0;
+let sOperacao = '';
+
 const criaCalculadora = () => {
     let oTable = document.createElement('table');
 
     oTable.appendChild(criaTr());
-    oTable.appendChild(criaTr([7,   8,   9, '%']));
+    oTable.appendChild(criaTr([7,   8,   9, '/']));
     oTable.appendChild(criaTr([4,   5,   6, 'x']));
     oTable.appendChild(criaTr([1,   2,   3, '-']));
     oTable.appendChild(criaTr([0, '.', '=', '+']));
@@ -29,7 +32,8 @@ const criaDivConteudo = () => {
     let oTd = document.createElement('td');
     let oDivConteudo = document.createElement('div');
     oDivConteudo.id = 'divConteudo';
-    oDivConteudo.style = 'width: 100%; height: 75px; border: 1px lightgray solid; font-size: 80px; text-align: right';
+    oDivConteudo.textContent = 0;
+    oDivConteudo.className = 'conteudo';
     oTd.setAttribute('colspan', 4);
     oTd.appendChild(oDivConteudo);
     return oTd;
@@ -41,14 +45,55 @@ const criaTd = valor => {
 
     oElemento.value = valor;
     oElemento.textContent = valor;
-    oElemento.style = 'width: 75px; height: 75px; font-size: 30px; cursor: pointer;';
+    oElemento.className = 'botao';
     oElemento.addEventListener('click', function() {
         let oDivConteudo = document.getElementById('divConteudo');
-        oDivConteudo.textContent = `${oDivConteudo.innerHTML}${this.value}`;
+        if(isNumero(valor) || isPonto(valor)) {
+            oDivConteudo.textContent = oDivConteudo.textContent != 0 ? `${oDivConteudo.textContent}${this.value}` : this.value;
+        }
+        else if(!isIgual(valor)) {
+            fTotal = parseFloat(oDivConteudo.textContent);
+            sOperacao = valor;
+            oDivConteudo.textContent = '';
+        }
+        else {
+            executaOperacao(sOperacao);
+        }
     });
     oTd.appendChild(oElemento);
 
     return oTd;
 }
+
+const executaOperacao = sText => {
+    let oDivConteudo = document.getElementById('divConteudo');
+    switch(sText) {
+        case '+':
+            fTotal = fTotal + parseFloat(oDivConteudo.textContent);
+            oDivConteudo.textContent = fTotal;
+        break;
+            
+        case '-':
+            fTotal = fTotal - parseFloat(oDivConteudo.textContent);
+            oDivConteudo.textContent = fTotal;
+        break;
+
+        case 'x':
+            fTotal = fTotal * parseFloat(oDivConteudo.textContent);
+            oDivConteudo.textContent = fTotal;
+        break;
+
+        case '/':
+            fTotal = fTotal / parseFloat(oDivConteudo.textContent);
+            oDivConteudo.textContent = fTotal;
+        break;
+    }
+}
+
+const isNumero = valor => typeof valor == 'number'
+
+const isPonto = valor => valor == '.';
+
+const isIgual = valor => valor == '=';
 
 window.onload = () => criaCalculadora();
